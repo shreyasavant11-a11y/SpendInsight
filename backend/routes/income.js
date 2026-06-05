@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { addIncome, getIncome, deleteIncome, updateIncome } = require('../controllers/incomeController');
+const { addIncome, getIncomes, deleteIncome, updateIncome, } = require('../controllers/incomeController');
 const protect = require('../middleware/authMiddleware');
 
 router.post('/', protect, addIncome);
-router.get('/', protect, getIncome);
+router.get('/', protect, getIncomes);
 router.delete('/:id', protect, deleteIncome);
 router.put('/:id', protect,updateIncome);
 

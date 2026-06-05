@@ -14,7 +14,7 @@ const addIncome = async (req,res) => {
 
     };
 
-    const getIncome = async (req, res) => {
+    const getIncomes = async (req, res) => {
   try {
     const income= await Income.find({ user: req.user.id }).sort({ date: -1 });
     res.json(income);
@@ -60,7 +60,7 @@ const updateIncome = async (req, res) => {
   }
 };
 
-module.exports = { addIncome, getIncome, deleteIncome, updateIncome };
+module.exports = { addIncome, getIncomes, deleteIncome, updateIncome };
     
 
 
