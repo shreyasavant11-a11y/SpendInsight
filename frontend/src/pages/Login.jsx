@@ -33,7 +33,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center"
+    style={{
+      backgroundImage: "url('/Gradiente Suave.jpg')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+          }}>
       <div className="bg-gray-800 rounded-xl p-8 w-full max-w-md">
         <h2 className="text-white text-2xl font-bold mb-6">Login</h2>
 
