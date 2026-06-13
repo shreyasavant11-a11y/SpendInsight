@@ -70,4 +70,4 @@ const IncomeEntry =() => {
      );
 };
 
-export default Income;
+export default IncomeEntry;
