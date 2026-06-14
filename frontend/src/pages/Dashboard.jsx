@@ -1,11 +1,13 @@
 import Layout from '../components/Layout';
 import { useState, useEffect } from 'react';
 import API from '../api/axios';
+import PieChart from '../components/PieChart';
 
 const Dashboard = () => {
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter,setFilter] = useState('monthly');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,23 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
+
+  const getFilteredExpenses = () => {
+  const now = new Date();
+  let startDate;
+
+  if (filter === 'weekly') {
+    startDate = new Date(now - 7 * 24 * 60 * 60 * 1000);
+  } else if (filter === 'monthly') {
+    startDate = new Date(now - 30 * 24 * 60 * 60 * 1000);
+  } else {
+    startDate = new Date(now - 365 * 24 * 60 * 60 * 1000);
+  }
+
+  return expenses.filter(e => new Date(e.date) >= startDate);
+};
+
+const filteredExpenses = getFilteredExpenses();
 
   const totalExpense = expenses.reduce((sum, item) => sum + item.amount, 0);
   const totalIncome = incomes.reduce((sum, item) => sum + item.amount, 0);
@@ -51,6 +70,33 @@ const Dashboard = () => {
           <p className="text-blue-400 text-2xl font-bold mt-2">₹{balance}</p>
         </div>
       </div>
+
+      {expenses.length > 0 && (
+  <div className="mt-8">
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-xl font-bold">Spending Breakdown</h2>
+      
+      
+      <select
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="bg-gray-600 text-white rounded-lg p-2 text-sm"
+      >
+        <option value="weekly">This Week</option>
+        <option value="monthly">This Month</option>
+        <option value="yearly">This Year</option>
+      </select>
+    </div>
+
+    <div className="bg-gray-700 rounded-xl p-6 w-96">
+      {filteredExpenses.length === 0 ? (
+        <p className="text-gray-400">No expenses in this period!</p>
+      ) : (
+        <PieChart expenses={filteredExpenses} />
+      )}
+    </div>
+  </div>
+)}
 
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
