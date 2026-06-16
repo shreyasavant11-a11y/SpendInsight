@@ -15,7 +15,7 @@ app.use(express.json());
 app.use('/api/analysis', require('./routes/analysis'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/expenses', require('./routes/expense'));
-app.use('/api/income', require('./routes/income'));
+app.use('/api/incomes', require('./routes/income'));
 
 
 mongoose.connect(process.env.MONGO_URI)
