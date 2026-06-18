@@ -47,14 +47,17 @@ const generateAnalysis=async (req,res)=>{
       return res.status(400).json({error:'No expenses to analyze'});
     }
 
-    const prompt=`Analyze these expenses and provide insights:${expenses.map(e => `-${e.title}: ₹${e.amount} (${e.note || 'no note'})`).join('\n')}
-                please provide:
-                1.Major spending areas
-                2.Unusual expenses
-                3.Saving opportunities
-                4.Brief recommendations
-                keep it concise and practical.`;
+    const prompt = `Analyze these expenses briefly:
+${expenses.map(e => `- ${e.title}: ₹${e.amount}`).join('\n')}
 
+Respond in this EXACT format (plain text, no asterisks, no markdown):
+
+Top Spending: [one short line]
+Unusual: [one short line, or "None"]
+Save On: [one short line]
+Tip: [one short actionable sentence]
+
+Keep total under 60 words. Be direct and concise.`;
     const {GoogleGenerativeAI}= require('@google/generative-ai');
     const genAI =new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
    const model = genAI.getGenerativeModel({
