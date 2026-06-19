@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Layout from '../components/Layout';
 import API from '../api/axios';
 
 const AnalysisHistory = () => {
   const [analyses, setAnalyses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [currentAnalysis, setCurrentAnalysis] = useState('');
   const [error, setError] = useState('');
+  const [showPast, setShowPast] = useState(false);
 
   const fetchAnalyses = async () => {
     try {
@@ -15,14 +15,8 @@ const AnalysisHistory = () => {
       setAnalyses(response.data);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchAnalyses();
-  }, []);
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -30,7 +24,6 @@ const AnalysisHistory = () => {
     try {
       const response = await API.post('/analysis/generate');
       setCurrentAnalysis(response.data.analysisText);
-      fetchAnalyses();
     } catch (err) {
       setError(err.response?.data?.error || 'Something went wrong');
     } finally {
@@ -38,7 +31,10 @@ const AnalysisHistory = () => {
     }
   };
 
-  if (loading) return <p className="text-white p-8">Loading...</p>;
+  const togglePast = () => {
+    if (!showPast) fetchAnalyses();
+    setShowPast(!showPast);
+  };
 
   return (
     <Layout>
@@ -52,6 +48,13 @@ const AnalysisHistory = () => {
         {generating ? 'Analyzing...' : '🤖 Analyze My Expenses'}
       </button>
 
+      <button
+        onClick={togglePast}
+        className="bg-gray-600 hover:bg-gray-700 text-white rounded-lg px-6 py-3 mb-6 ml-4"
+      >
+        {showPast ? 'Hide Past Analyses' : 'View Past Analyses'}
+      </button>
+
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       {currentAnalysis && (
@@ -61,23 +64,27 @@ const AnalysisHistory = () => {
         </div>
       )}
 
-      <h2 className="text-xl font-bold mb-4">Past Analyses</h2>
-      <div className="space-y-4">
-        {analyses.length === 0 ? (
-          <p className="text-gray-400">No past analyses yet!</p>
-        ) : (
-          analyses.map((item) => (
-            <div key={item._id} className="bg-gray-700 rounded-xl p-6">
-              <p className="text-gray-400 text-sm mb-2">
-                {new Date(item.createdAt).toLocaleDateString('en-IN', {
-                  day: 'numeric', month: 'short', year: 'numeric'
-                })}
-              </p>
-              <p className="text-gray-300 whitespace-pre-line">{item.analysisText}</p>
-            </div>
-          ))
-        )}
-      </div>
+      {showPast && (
+        <>
+          <h2 className="text-xl font-bold mb-4">Past Analyses</h2>
+          <div className="space-y-4">
+            {analyses.length === 0 ? (
+              <p className="text-gray-400">No past analyses yet!</p>
+            ) : (
+              analyses.map((item) => (
+                <div key={item._id} className="bg-gray-700 rounded-xl p-6">
+                  <p className="text-gray-400 text-sm mb-2">
+                    {new Date(item.createdAt).toLocaleDateString('en-IN', {
+                      day: 'numeric', month: 'short', year: 'numeric'
+                    })}
+                  </p>
+                  <p className="text-gray-300 whitespace-pre-line">{item.analysisText}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </>
+      )}
     </Layout>
   );
 };

@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import {useTheme} from '../context/ThemeContext';
 
 const Sidebar = () => {
   const { logout, user } = useAuth();
+ const { darkMode, toggleTheme } = useTheme();
 
   return (
     <div className="w-64 min-h-screen bg-gray-900 flex flex-col p-4">
@@ -69,6 +71,10 @@ const Sidebar = () => {
         className="w-full p-3 text-sm text-red-400 hover:bg-gray-800 rounded-lg text-left">
         🚪 Logout
       </button>
+
+      <button onClick={toggleTheme}>
+  {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+</button>
 
     </div>
   );
