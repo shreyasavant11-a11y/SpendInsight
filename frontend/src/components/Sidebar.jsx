@@ -1,10 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import {useTheme} from '../context/ThemeContext';
 
 const Sidebar = () => {
   const { logout, user } = useAuth();
- const { darkMode, toggleTheme } = useTheme();
 
   return (
     <div className="w-64 min-h-screen bg-gray-900 flex flex-col p-4">
@@ -18,7 +16,6 @@ const Sidebar = () => {
       </p>
 
       <nav className="flex-1 space-y-2">
-
         <NavLink to="/dashboard"
           className={({ isActive }) =>
             `block p-3 rounded-lg text-sm ${isActive
@@ -26,24 +23,6 @@ const Sidebar = () => {
               : 'text-gray-400 hover:bg-gray-800'}`
           }>
           📊 Dashboard
-        </NavLink>
-
-        <NavLink to="/expenses"
-          className={({ isActive }) =>
-            `block p-3 rounded-lg text-sm ${isActive
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:bg-gray-800'}`
-          }>
-          ➕ Add Expense
-        </NavLink>
-
-        <NavLink to="/income"
-          className={({ isActive }) =>
-            `block p-3 rounded-lg text-sm ${isActive
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:bg-gray-800'}`
-          }>
-          💵 Add Income
         </NavLink>
 
         <NavLink to="/history"
@@ -63,7 +42,6 @@ const Sidebar = () => {
           }>
           🤖 AI Analysis
         </NavLink>
-
       </nav>
 
       <button
@@ -71,11 +49,6 @@ const Sidebar = () => {
         className="w-full p-3 text-sm text-red-400 hover:bg-gray-800 rounded-lg text-left">
         🚪 Logout
       </button>
-
-      <button onClick={toggleTheme}>
-  {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-</button>
-
     </div>
   );
 };
