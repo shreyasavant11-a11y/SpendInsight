@@ -9,12 +9,10 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('monthly');
 
-  // Expense form
   const [expTitle, setExpTitle] = useState('');
   const [expAmount, setExpAmount] = useState('');
   const [expNote, setExpNote] = useState('');
 
-  // Income form
   const [incTitle, setIncTitle] = useState('');
   const [incAmount, setIncAmount] = useState('');
   const [incNote, setIncNote] = useState('');
@@ -58,6 +56,7 @@ const Dashboard = () => {
     const now = new Date();
     let startDate;
 
+
     if (filter === 'weekly') {
       startDate = new Date(now - 7 * 24 * 60 * 60 * 1000);
     } else if (filter === 'monthly') {
@@ -70,11 +69,17 @@ const Dashboard = () => {
   };
 
   const filteredExpenses = getFilteredExpenses();
-
+const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? 'This Month' : 'This Year';
   const totalExpense = expenses.reduce((sum, item) => sum + item.amount, 0);
   const totalIncome = incomes.reduce((sum, item) => sum + item.amount, 0);
   const balance = totalIncome - totalExpense;
   const recentExpenses = expenses.slice(0, 5);
+
+  const totalTransactions = filteredExpenses.length;
+  const totalFilteredAmount = filteredExpenses.reduce((sum, item) => sum + item.amount, 0);
+  const avgExpense = filteredExpenses.length > 0
+    ? (totalFilteredAmount / filteredExpenses.length).toFixed(0)
+    : 0;
 
   if (loading) return <p className="text-white p-8">Loading...</p>;
 
@@ -82,7 +87,6 @@ const Dashboard = () => {
     <Layout>
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-      {/* ROW 1 — Add Expense + Add Income Forms */}
       <div className="grid grid-cols-2 gap-6 mb-8">
         <div className="bg-gray-700 rounded-xl p-6">
           <h2 className="text-lg font-bold mb-4">➕ Add Expense</h2>
@@ -147,7 +151,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-     
       <div className="grid grid-cols-3 gap-6">
         <div className="bg-gray-700 rounded-xl p-6">
           <p className="text-gray-400 text-sm">Total Income</p>
@@ -165,7 +168,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      
       {expenses.length > 0 && (
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4">
@@ -181,17 +183,33 @@ const Dashboard = () => {
             </select>
           </div>
 
-          <div className="bg-gray-700 rounded-xl p-6 w-96">
-            {filteredExpenses.length === 0 ? (
-              <p className="text-gray-400">No expenses in this period!</p>
-            ) : (
-              <PieChart expenses={filteredExpenses} />
-            )}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="bg-gray-700 rounded-xl p-6">
+              {filteredExpenses.length === 0 ? (
+                <p className="text-gray-400">No expenses in this period!</p>
+              ) : (
+                <PieChart expenses={filteredExpenses} />
+              )}
+            </div>
+
+            <div className="bg-gray-700 rounded-xl p-6">
+              <h2 className="text-lg font-bold mb-4">Top Categories</h2>
+              <div className="space-y-3">
+                <p className="text-gray-300">
+                  Total Transactions: <span className="font-bold text-white">{totalTransactions}</span>
+                </p>
+                <p className="text-gray-300">
+                  Average Expense: <span className="font-bold text-white">₹{avgExpense}</span>
+                </p>
+                <p className="text-gray-300">
+              {periodLabel} Total: <span className="font-bold text-white">₹{totalFilteredAmount}</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-     
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
         <div className="bg-gray-700 rounded-xl p-6">
