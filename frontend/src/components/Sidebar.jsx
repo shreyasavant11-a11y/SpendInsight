@@ -5,7 +5,7 @@ const Sidebar = () => {
   const { logout, user } = useAuth();
 
   return (
-    <div className="w-64 min-h-screen bg-gray-900 flex flex-col p-4">
+    <div className="w-64 min-h-screen bg-[#14161f] flex flex-col p-4 border-r border-white/5">
 
       <h1 className="text-white text-xl font-bold mb-8">
         💸 ExpenseTracker
@@ -18,28 +18,28 @@ const Sidebar = () => {
       <nav className="flex-1 space-y-2">
         <NavLink to="/dashboard"
           className={({ isActive }) =>
-            `block p-3 rounded-lg text-sm ${isActive
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:bg-gray-800'}`
-          }>
+  `block p-3 rounded-lg text-sm transition ${isActive
+    ? 'bg-indigo-600 text-white'
+    : 'text-gray-400 hover:bg-white/5 hover:text-white'}`
+}>
           📊 Dashboard
         </NavLink>
 
         <NavLink to="/history"
           className={({ isActive }) =>
-            `block p-3 rounded-lg text-sm ${isActive
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:bg-gray-800'}`
-          }>
+  `block p-3 rounded-lg text-sm transition ${isActive
+    ? 'bg-indigo-600 text-white'
+    : 'text-gray-400 hover:bg-white/5 hover:text-white'}`
+}>
           📋 History
         </NavLink>
 
         <NavLink to="/analysis"
           className={({ isActive }) =>
-            `block p-3 rounded-lg text-sm ${isActive
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:bg-gray-800'}`
-          }>
+  `block p-3 rounded-lg text-sm transition ${isActive
+    ? 'bg-indigo-600 text-white'
+    : 'text-gray-400 hover:bg-white/5 hover:text-white'}`
+}>
           🤖 AI Analysis
         </NavLink>
       </nav>

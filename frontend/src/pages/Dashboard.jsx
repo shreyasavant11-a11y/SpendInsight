@@ -210,21 +210,7 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
         </div>
       )}
 
-      <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
-        <div className="bg-gray-700 rounded-xl p-6">
-          {recentExpenses.length === 0 ? (
-            <p className="text-gray-400">No expenses yet!</p>
-          ) : (
-            recentExpenses.map((expense) => (
-              <div key={expense._id} className="flex justify-between py-2 border-b border-gray-600">
-                <p className="text-white">{expense.title}</p>
-                <p className="text-red-400">₹{expense.amount}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      
     </Layout>
   );
 };
