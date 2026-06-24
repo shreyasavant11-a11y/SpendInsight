@@ -88,7 +88,7 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-2 gap-6 mb-8">
-        <div className="bg-gray-700 rounded-xl p-6">
+        <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
           <h2 className="text-lg font-bold mb-4">➕ Add Expense</h2>
           <input
             type="text"
@@ -119,7 +119,7 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
           </button>
         </div>
 
-        <div className="bg-gray-700 rounded-xl p-6">
+        <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
           <h2 className="text-lg font-bold mb-4">💵 Add Income</h2>
           <input
             type="text"
@@ -152,17 +152,17 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        <div className="bg-gray-700 rounded-xl p-6">
+        <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
           <p className="text-gray-400 text-sm">Total Income</p>
           <p className="text-green-400 text-2xl font-bold mt-2">₹{totalIncome}</p>
         </div>
 
-        <div className="bg-gray-700 rounded-xl p-6">
+        <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
           <p className="text-gray-400 text-sm">Total Expense</p>
           <p className="text-red-400 text-2xl font-bold mt-2">₹{totalExpense}</p>
         </div>
 
-        <div className="bg-gray-700 rounded-xl p-6">
+        <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
           <p className="text-gray-400 text-sm">Balance</p>
           <p className="text-blue-400 text-2xl font-bold mt-2">₹{balance}</p>
         </div>
@@ -184,7 +184,7 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <div className="bg-gray-700 rounded-xl p-6">
+            <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
               {filteredExpenses.length === 0 ? (
                 <p className="text-gray-400">No expenses in this period!</p>
               ) : (
@@ -192,7 +192,7 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
               )}
             </div>
 
-            <div className="bg-gray-700 rounded-xl p-6">
+            <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
               <h2 className="text-lg font-bold mb-4">Top Categories</h2>
               <div className="space-y-3">
                 <p className="text-gray-300">
