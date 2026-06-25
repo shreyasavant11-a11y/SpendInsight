@@ -47,22 +47,32 @@ const generateAnalysis=async (req,res)=>{
       return res.status(400).json({error:'No expenses to analyze'});
     }
 
-    const prompt = `Analyze these expenses briefly:
-${expenses.map(e => `- ${e.title}: ₹${e.amount}`).join('\n')}
+    const prompt =`You are a personal finance advisor analyzing a user's expenses. Here is their expense data:
 
-Respond in this EXACT format (plain text, no asterisks, no markdown):
+      ${expenses.map(e => `- ${e.title}: ₹${e.amount} (${e.note || 'no note'}) on ${new Date(e.date).toLocaleDateString()}`).join('\n')}
 
-Top Spending: [one short line]
-Unusual: [one short line, or "None"]
-Save On: [one short line]
-Tip: [one short actionable sentence]
+      Provide a thoughtful analysis covering:
+      1. Which spending categories dominate, and what that suggests about their lifestyle/priorities
+      2. Any expense that looks unusual, risky, or worth questioning (with specific reasoning, not just "it's big")
+      3. A specific, realistic saving opportunity based on the actual data (mention real numbers)
+      4. One actionable recommendation tailored to THIS data, not generic advice
 
-Keep total under 60 words. Be direct and concise.`;
+    Write in plain conversational text, no markdown, no asterisks, no rigid headers. Make it feel like a knowledgeable friend reviewing their spending — specific, insightful, slightly different each time based on what's actually unusual in the data. Around 80-120 words.
+
+    FORMAT RULES (important):
+    - Start with ONE short conversational opening line (no heading).
+    - Then present the 4 points as SHORT separate lines or bullet points, each 1-2 sentences max, with a bolded 2-4 word label at the start of each point (e.g. "Biggest spend —", "Worth a second look —", "Save here —", "Try this —"). Vary these labels naturally each time, don't reuse the same exact words always.
+    - Use line breaks between each point so it's scannable, not one dense paragraph.
+    - No markdown headers, no asterisks around whole sentences, just plain text with line breaks.
+    - Total length: 80-120 words.`;
+
+
+
     const {GoogleGenerativeAI}= require('@google/generative-ai');
     const genAI =new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-   const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash"
-});
+    const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash"
+      });
 const result = await model.generateContent(prompt);
     const analysisText =result.response.text();
 
