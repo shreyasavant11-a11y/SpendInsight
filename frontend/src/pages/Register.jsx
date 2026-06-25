@@ -55,6 +55,9 @@ style={{
   backgroundPosition: 'center',
 }}>
       <div className="bg-gray-800 rounded-xl p-8 w-full max-w-md">
+        <h1 className="text-white text-3xl font-bold text-center mb-2">
+          💸 ExpenseTracker
+        </h1>
         <h2 className="text-white text-2xl font-bold mb-6">Create Account</h2>
 
         {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
