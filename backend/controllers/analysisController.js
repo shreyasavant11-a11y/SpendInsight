@@ -63,7 +63,7 @@ const generateAnalysis=async (req,res)=>{
     - Start with ONE short conversational opening line (no heading).
     - Then present the 4 points as SHORT separate lines or bullet points, each 1-2 sentences max, with a bolded 2-4 word label at the start of each point (e.g. "Biggest spend —", "Worth a second look —", "Save here —", "Try this —"). Vary these labels naturally each time, don't reuse the same exact words always.
     - Use line breaks between each point so it's scannable, not one dense paragraph.
-    - No markdown headers, no asterisks around whole sentences, just plain text with line breaks.
+    - No markdown headers, especially-no asterisks around whole sentences, just plain text with line breaks.
     - Total length: 80-120 words.`;
 
 
