@@ -56,6 +56,20 @@ const handleUpdate=async (id)=>{
     }
 };
 
+const getMonthlyTotals = () => {
+  const grouped = expenses.reduce((acc, expense) => {
+    const monthKey = new Date(expense.date).toLocaleDateString('en-IN',{
+      month:'long',
+      year:'numeric'
+    });
+    acc[monthKey]=(acc[monthKey] || 0) + expense.amount;
+    return acc;
+  },{});
+
+  return Object.entries(grouped);
+};
+  const monthlyTotals = getMonthlyTotals();
+
 if(loading) return <p className ="text-white p-8">Loading....</p>;
 
  return (
@@ -158,7 +172,22 @@ if(loading) return <p className ="text-white p-8">Loading....</p>;
             )}
           </tbody>
         </table>
+      
       </div>
+    
+      <div className="mt-8">
+          <h2 className="text-xl font-bold mb-4">Monthly Expense </h2>
+          <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl p-6 space-y-3">
+        {monthlyTotals.map(([month, total]) => (
+      <div key={month} className="flex justify-between py-2 border-b border-white/5">
+        <p className="text-gray-300">{month}</p>
+        <p className="text-red-400 font-bold">₹{total}</p>
+      </div>
+    ))}
+          </div>
+
+        </div>
+      
     </Layout>
   );
 };

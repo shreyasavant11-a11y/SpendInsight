@@ -35,7 +35,7 @@ const AnalysisHistory = () => {
   const handleDelete = async(id) =>{
     try{
       await API.delete(`/analysis/${id}`);
-      setAnalyses(analyses.filter(a=>filter(a => a._id !==id)));
+     setAnalyses(analyses.filter(a => a._id !== id));
     }catch(error){
       console.error(error);
     }

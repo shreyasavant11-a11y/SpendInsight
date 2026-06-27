@@ -68,20 +68,37 @@ const Dashboard = () => {
     return expenses.filter(e => new Date(e.date) >= startDate);
   };
 
+  const getFilteredIncomes = () => {
+  const now = new Date();
+  let startDate;
+
+  if (filter === 'weekly') {
+    startDate = new Date(now - 7 * 24 * 60 * 60 * 1000);
+  } else if (filter === 'monthly') {
+    startDate = new Date(now - 30 * 24 * 60 * 60 * 1000);
+  } else {
+    startDate = new Date(now - 365 * 24 * 60 * 60 * 1000);
+  }
+
+  return incomes.filter(i => new Date(i.date) >= startDate);
+};
+
   const filteredExpenses = getFilteredExpenses();
-const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? 'This Month' : 'This Year';
-  const totalExpense = expenses.reduce((sum, item) => sum + item.amount, 0);
-  const totalIncome = incomes.reduce((sum, item) => sum + item.amount, 0);
+  const filteredIncomes=getFilteredIncomes();
+
+  const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? 'This Month' : 'This Year';
+
+  const totalExpense = filteredExpenses.reduce((sum, item) => sum + item.amount, 0);
+  const totalIncome = filteredIncomes.reduce((sum, item) => sum + item.amount, 0);
   const balance = totalIncome - totalExpense;
-  const recentExpenses = expenses.slice(0, 5);
+  
 
   const totalTransactions = filteredExpenses.length;
-  const totalFilteredAmount = filteredExpenses.reduce((sum, item) => sum + item.amount, 0);
   const avgExpense = filteredExpenses.length > 0
-    ? (totalFilteredAmount / filteredExpenses.length).toFixed(0)
+    ? (totalExpense / filteredExpenses.length).toFixed(0)
     : 0;
 
-  if (loading) return <p className="text-white p-8">Loading...</p>;
+if (loading) return <p className="text-white p-8">Loading...</p>;
 
   return (
     <Layout>
@@ -151,37 +168,40 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      {/* Naya dropdown — sabse upar, poore dashboard ko control karta hai */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold">Dashboard Overview</h2>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="bg-gray-600 text-white rounded-lg p-2 text-sm"
+        >
+          <option value="weekly">This Week</option>
+          <option value="monthly">This Month</option>
+          <option value="yearly">This Year</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6 mb-8">
         <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
-          <p className="text-gray-400 text-sm">Total Income</p>
+          <p className="text-gray-400 text-sm">{periodLabel} Income</p>
           <p className="text-green-400 text-2xl font-bold mt-2">₹{totalIncome}</p>
         </div>
 
         <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
-          <p className="text-gray-400 text-sm">Total Expense</p>
+          <p className="text-gray-400 text-sm">{periodLabel} Expense</p>
           <p className="text-red-400 text-2xl font-bold mt-2">₹{totalExpense}</p>
         </div>
 
         <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
-          <p className="text-gray-400 text-sm">Balance</p>
+          <p className="text-gray-400 text-sm">{periodLabel} Balance</p>
           <p className="text-blue-400 text-2xl font-bold mt-2">₹{balance}</p>
         </div>
       </div>
 
       {expenses.length > 0 && (
         <div className="mt-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Spending Breakdown</h2>
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="bg-gray-600 text-white rounded-lg p-2 text-sm"
-            >
-              <option value="weekly">This Week</option>
-              <option value="monthly">This Month</option>
-              <option value="yearly">This Year</option>
-            </select>
-          </div>
+          <h2 className="text-xl font-bold mb-4">Spending Breakdown</h2>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
@@ -202,15 +222,13 @@ const periodLabel = filter === 'weekly' ? 'This Week' : filter === 'monthly' ? '
                   Average Expense: <span className="font-bold text-white">₹{avgExpense}</span>
                 </p>
                 <p className="text-gray-300">
-              {periodLabel} Total: <span className="font-bold text-white">₹{totalFilteredAmount}</span>
+                  {periodLabel} Total: <span className="font-bold text-white">₹{totalExpense}</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
       )}
-
-      
     </Layout>
   );
 };
