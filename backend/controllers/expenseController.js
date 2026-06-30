@@ -1,4 +1,5 @@
 const Expense = require('../models/Expense');
+const mongoose = require('mongoose');
 
 const addExpense = async (req, res) => {
   try {
@@ -7,7 +8,8 @@ const addExpense = async (req, res) => {
     await expense.save();
     res.status(201).json(expense);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Add expense error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
@@ -16,12 +18,17 @@ const getExpenses = async (req, res) => {
     const expenses = await Expense.find({ user: req.user.id }).sort({ date: -1 });
     res.json(expenses);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Get expense error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
 const deleteExpense = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid ID' });
+    }
+
     const expense = await Expense.findById(req.params.id);
     if (!expense) return res.status(404).json({ message: 'Not found' });
 
@@ -32,12 +39,17 @@ const deleteExpense = async (req, res) => {
     await Expense.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Delete expense error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
 const updateExpense = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid ID' });
+    }
+
     const expense = await Expense.findById(req.params.id);
     if (!expense) return res.status(404).json({ message: 'Not found' });
 
@@ -53,7 +65,8 @@ const updateExpense = async (req, res) => {
     );
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Update expense error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 

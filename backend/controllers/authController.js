@@ -28,7 +28,7 @@ const register = async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    // ✅ Same format as login response
+    
     res.status(201).json({
       token,
       user: {
@@ -37,9 +37,10 @@ const register = async (req, res) => {
         email: user.email
       }
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+ } catch (error) {
+  console.error('Register error:', error);
+  res.status(500).json({ error: 'Something went wrong' });
+}
 };
 
 const login = async (req, res) => {
@@ -71,8 +72,9 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  console.error('Login error:', error);
+  res.status(500).json({ error: 'Something went wrong' });
+}
 };
 
 module.exports = { register, login };

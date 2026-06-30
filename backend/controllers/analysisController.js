@@ -1,5 +1,6 @@
 const Analysis = require('../models/Analysis');
 const Expense = require('../models/Expense');
+const mongoose = require('mongoose');
 
 const saveAnalysis = async (req, res) => {
   try {
@@ -8,7 +9,8 @@ const saveAnalysis = async (req, res) => {
     await analysis.save();
     res.status(201).json(analysis);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Save analysis error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
@@ -18,12 +20,17 @@ const getAnalyses = async (req, res) => {
       .sort({ createdAt: -1 });
     res.json(analyses);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Get analysis error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
 const deleteAnalysis = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid ID' });
+    }
+
     const analysis = await Analysis.findById(req.params.id);
     if (!analysis) return res.status(404).json({ message: 'Not found' });
 
@@ -34,20 +41,20 @@ const deleteAnalysis = async (req, res) => {
     await Analysis.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Delete analysis error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
-const generateAnalysis=async (req,res)=>{
-  try{
+const generateAnalysis = async (req, res) => {
+  try {
+    const expenses = await Expense.find({ user: req.user.id });
 
-    const expenses=await Expense.find({user:req.user.id});
-
-    if(expenses.length === 0){
-      return res.status(400).json({error:'No expenses to analyze'});
+    if (expenses.length === 0) {
+      return res.status(400).json({ error: 'No expenses to analyze' });
     }
 
-    const prompt =`You are a personal finance advisor analyzing a user's expenses. Here is their expense data:
+    const prompt = `You are a personal finance advisor analyzing a user's expenses. Here is their expense data:
 
       ${expenses.map(e => `- ${e.title}: ₹${e.amount} (${e.note || 'no note'}) on ${new Date(e.date).toLocaleDateString()}`).join('\n')}
 
@@ -63,31 +70,25 @@ const generateAnalysis=async (req,res)=>{
     - Start with ONE short conversational opening line (no heading).
     - Then present the 4 points as SHORT separate lines or bullet points, each 1-2 sentences max, with a bolded 2-4 word label at the start of each point (e.g. "Biggest spend —", "Worth a second look —", "Save here —", "Try this —"). Vary these labels naturally each time, don't reuse the same exact words always.
     - Use line breaks between each point so it's scannable, not one dense paragraph.
-    - No markdown headers, especially-no asterisks around whole sentences, just plain text with line breaks.
+    - No markdown headers, especially no asterisks around whole sentences, just plain text with line breaks.
     - Total length: 80-120 words.`;
 
-
-
-    const {GoogleGenerativeAI}= require('@google/generative-ai');
-    const genAI =new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash"
-      });
-const result = await model.generateContent(prompt);
-    const analysisText =result.response.text();
+      model: "gemini-2.5-flash"
+    });
+    const result = await model.generateContent(prompt);
+    const analysisText = result.response.text();
 
-    const analysis =new Analysis({analysisText,user:req.user.id});
-  await analysis.save();
+    const analysis = new Analysis({ analysisText, user: req.user.id });
+    await analysis.save();
 
-
-    res.status(201).json({analysisText});
-  }catch(error){
-    res.status(500).json({error:error.message});
+    res.status(201).json({ analysisText });
+  } catch (error) {
+    console.error('Generate analysis error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
-
-  
-
 };
 
-
-module.exports = { saveAnalysis, getAnalyses, deleteAnalysis,generateAnalysis };
+module.exports = { saveAnalysis, getAnalyses, deleteAnalysis, generateAnalysis };
