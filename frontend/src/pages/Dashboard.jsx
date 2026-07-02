@@ -17,6 +17,9 @@ const Dashboard = () => {
   const [incAmount, setIncAmount] = useState('');
   const [incNote, setIncNote] = useState('');
 
+  const [expSuccess, setExpSuccess] = useState('');
+  const [incSuccess, setIncSuccess]= useState('');
+
   const fetchData = async () => {
     try {
       const expenseRes = await API.get('/expenses');
@@ -40,6 +43,8 @@ const Dashboard = () => {
     setExpTitle('');
     setExpAmount('');
     setExpNote('');
+    setExpSuccess('Expense added successfully!');
+    setTimeout(()=> setExpSuccess(''),3000);
     fetchData();
   };
 
@@ -49,6 +54,7 @@ const Dashboard = () => {
     setIncTitle('');
     setIncAmount('');
     setIncNote('');
+    setIncSuccess('Income added successfully!');
     fetchData();
   };
 
@@ -134,6 +140,9 @@ if (loading) return <p className="text-white p-8">Loading...</p>;
           >
             Add Expense
           </button>
+          {expSuccess && (
+       <p className="text-green-400 text-sm mt-2">{expSuccess}</p>
+        )}
         </div>
 
         <div className="bg-[#1c1f2e] border border-white/5 rounded-2xl shadow-lg p-6">
@@ -165,6 +174,9 @@ if (loading) return <p className="text-white p-8">Loading...</p>;
           >
             Add Income
           </button>
+          {incSuccess && (
+      <p className="text-green-400 text-sm mt-2">{incSuccess}</p>
+        )}
         </div>
       </div>
 
