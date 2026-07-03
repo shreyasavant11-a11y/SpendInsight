@@ -56,8 +56,7 @@ const generateAnalysis = async (req, res) => {
 
     const prompt = `You are a personal finance advisor analyzing a user's expenses. Here is their expense data:
 
-      ${expenses.map(e => `- ${e.title}: ₹${e.amount} (${e.note || 'no note'}) on ${new Date(e.date).toLocaleDateString()}`).join('\n')}
-
+     ${expenses.map(e => `- ${e.title.trim().slice(0, 50)}: ₹${e.amount} (${(e.note || 'no note').trim().slice(0, 100)}) on ${new Date(e.date).toLocaleDateString()}`).join('\n')}
       Provide a thoughtful analysis covering:
       1. Which spending categories dominate, and what that suggests about their lifestyle/priorities
       2. Any expense that looks unusual, risky, or worth questioning (with specific reasoning, not just "it's big")
@@ -68,7 +67,7 @@ const generateAnalysis = async (req, res) => {
 
     FORMAT RULES (important):
     - Start with ONE short conversational opening line (no heading).
-    - Then present the 4 points as SHORT separate lines or bullet points, each 1-2 sentences max, with a bolded 2-4 word label at the start of each point (e.g. "Biggest spend —", "Worth a second look —", "Save here —", "Try this —"). Vary these labels naturally each time, don't reuse the same exact words always.
+    - Then present the 4 points as SHORT separate lines or bullet points, each 1-2 sentences max, with a bolded 2-4 word label at the start of each point (e.g. "Biggest spend —", "Worth a second look —", "Save here —", "Try this —"). Vary these labels naturally each time, don't reuse the same exact words always.Add symbols to make it look good
     - Use line breaks between each point so it's scannable, not one dense paragraph.
     - No markdown headers, especially no asterisks around whole sentences, just plain text with line breaks.
     - Total length: 80-120 words.`;

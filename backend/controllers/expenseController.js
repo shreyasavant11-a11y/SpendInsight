@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 const addExpense = async (req, res) => {
   try {
     const { title, amount, note } = req.body;
+    if (!title || typeof title !== 'string' || title.trim() === '') {
+      return res.status(400).json({ message: 'Title is required' });
+    }
+    if (amount === undefined || typeof amount !== 'number' || amount <= 0) {
+      return res.status(400).json({ message: 'Amount must be a positive number' });
+    }
+
     const expense = new Expense({ title, amount, note, user: req.user.id });
     await expense.save();
     res.status(201).json(expense);
@@ -12,6 +19,8 @@ const addExpense = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+
 
 const getExpenses = async (req, res) => {
   try {
@@ -22,6 +31,8 @@ const getExpenses = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+
 
 const deleteExpense = async (req, res) => {
   try {
@@ -44,10 +55,21 @@ const deleteExpense = async (req, res) => {
   }
 };
 
+
+
 const updateExpense = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: 'Invalid ID' });
+    }
+
+    const { title, amount, note } = req.body;
+
+    if (!title || typeof title !== 'string' || title.trim() === '') {
+      return res.status(400).json({ message: 'Title is required' });
+    }
+    if (amount === undefined || typeof amount !== 'number' || amount <= 0) {
+      return res.status(400).json({ message: 'Amount must be a positive number' });
     }
 
     const expense = await Expense.findById(req.params.id);
@@ -57,7 +79,7 @@ const updateExpense = async (req, res) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    const { title, amount, note } = req.body;
+   
     const updated = await Expense.findByIdAndUpdate(
       req.params.id,
       { title, amount, note },
@@ -69,5 +91,8 @@ const updateExpense = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+
+
 
 module.exports = { addExpense, getExpenses, deleteExpense, updateExpense };
