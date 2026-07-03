@@ -48,7 +48,17 @@ const deleteAnalysis = async (req, res) => {
 
 const generateAnalysis = async (req, res) => {
   try {
-    const expenses = await Expense.find({ user: req.user.id });
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const expenses = await Expense.find({
+      user: req.user.id,
+      date: {
+        $gte: startOfMonth,
+        $lte: endOfMonth
+      }
+    });
 
     if (expenses.length === 0) {
       return res.status(400).json({ error: 'No expenses to analyze' });
