@@ -46,6 +46,16 @@ const Sidebar = () => {
           📋 History
         </NavLink>
 
+        <NavLink to="/income-history"
+              className={({ isActive }) =>
+            `block p-3 rounded-xl text-sm font-medium transition ${isActive
+              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+              : 'text-gray-400 hover:bg-white/5 hover:text-white'}`
+          }>
+          💰 Income History
+      </NavLink>
+
+
         <NavLink to="/analysis"
           className={({ isActive }) =>
             `block p-3 rounded-xl text-sm font-medium transition ${isActive
