@@ -43,7 +43,7 @@ const Sidebar = () => {
               ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
               : 'text-gray-400 hover:bg-white/5 hover:text-white'}`
           }>
-          📋 History
+          📋 Expense History
         </NavLink>
 
         <NavLink to="/income-history"

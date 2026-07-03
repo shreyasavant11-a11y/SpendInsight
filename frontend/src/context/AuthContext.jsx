@@ -21,9 +21,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // ✅ useEffect ANDAR hai — logout access kar sakta hai
+  
   useEffect(() => {
-    if (!user) return; // sirf logged in hone pe run karo
+    if (!user) return; 
 
     let timer;
 
