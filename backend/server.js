@@ -8,9 +8,20 @@ dotenv.config();
 
 const app = express();
 
-app.use(helmet());
+const allowedOrigins = [
+  'https://spend-insight-inky.vercel.app',
+  'https://spend-insight-git-main-shreya-s-projects9.vercel.app',
+  'https://spend-insight-5z76i7pji-shreya-s-projects9.vercel.app'
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10kb' }));
